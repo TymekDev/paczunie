@@ -23,6 +23,21 @@ func TestNewPkg(t *testing.T) {
 			[]PkgOption{WithInpost(true)},
 			Pkg{Name: "inpost", Inpost: true},
 		},
+		{
+			"status_1",
+			[]PkgOption{WithStatus(Delivered)},
+			Pkg{Name: "status_1", Status: Delivered},
+		},
+		{
+			"status_2",
+			[]PkgOption{WithStatus(Shipped)},
+			Pkg{Name: "status_2", Status: Shipped},
+		},
+		{
+			"inpost_status",
+			[]PkgOption{WithInpost(true), WithStatus(Ordered)},
+			Pkg{Name: "inpost_status", Inpost: true, Status: Ordered},
+		},
 	}
 
 	for _, tt := range tests {
@@ -59,6 +74,38 @@ func TestInpostOpt_WithInpost(t *testing.T) {
 			p := Pkg{}
 			WithInpost(tt).apply(&p)
 			assert.Equal(t, tt, p.Inpost)
+		})
+	}
+}
+
+func TestStatusOpt_apply(t *testing.T) {
+	tests := []Status{
+		Ordered,
+		Shipped,
+		Delivered,
+	}
+
+	for _, tt := range tests {
+		t.Run(strconv.Itoa(int(tt)), func(t *testing.T) {
+			p := Pkg{}
+			statusOpt(tt).apply(&p)
+			assert.Equal(t, tt, p.Status)
+		})
+	}
+}
+
+func TestStatusOpt_WithStatus(t *testing.T) {
+	tests := []Status{
+		Ordered,
+		Shipped,
+		Delivered,
+	}
+
+	for _, tt := range tests {
+		t.Run(strconv.Itoa(int(tt)), func(t *testing.T) {
+			p := Pkg{}
+			WithStatus(tt).apply(&p)
+			assert.Equal(t, tt, p.Status)
 		})
 	}
 }
