@@ -30,5 +30,30 @@ func Register(r *mux.Router) error {
 			}
 		})
 
+	r.
+		Methods("POST").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			log.Trace().Str("method", "POST").Msg("Receive form")
+			if err := r.ParseForm(); err != nil {
+				err = errors.Wrap(err, fName)
+				log.Error().Stack().Err(err).Str("method", "POST").Send()
+				http.Error(w, "", http.StatusInternalServerError)
+				return
+			}
+
+			status := Ordered
+			if r.Form.Has("shipped") {
+				status = Shipped
+			}
+			p := NewPkg(
+				r.Form.Get("name"),
+				WithInpost(r.Form.Has("inpost")),
+				WithStatus(status),
+			)
+			log.Debug().Interface("package", p).Send()
+
+			http.Redirect(w, r, r.URL.Path, 302)
+		})
+
 	return nil
 }
