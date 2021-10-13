@@ -28,8 +28,9 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
+	s := &simpleStorage{}
 	r := mux.NewRouter()
-	if err := Register(r); err != nil {
+	if err := Register(r, s); err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}
 

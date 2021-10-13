@@ -9,8 +9,13 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type Storage interface {
+	Store(Pkg)
+	Values() []Pkg
+}
+
 // Register adds handlers to provided mux.Router.
-func Register(r *mux.Router) error {
+func Register(r *mux.Router, s Storage) error {
 	const fName = "Register"
 
 	t, err := template.ParseFiles("index.html")
@@ -22,7 +27,7 @@ func Register(r *mux.Router) error {
 		Methods("GET").
 		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log.Trace().Str("method", "GET").Msg("Serve template")
-			if err := t.Execute(w, nil); err != nil {
+			if err := t.Execute(w, s.Values()); err != nil {
 				err = errors.Wrap(err, fName)
 				log.Error().Stack().Err(err).Str("method", "GET").Send()
 				http.Error(w, "", http.StatusInternalServerError)
@@ -50,7 +55,8 @@ func Register(r *mux.Router) error {
 				WithInpost(r.Form.Has("inpost")),
 				WithStatus(status),
 			)
-			log.Debug().Interface("package", p).Send()
+			log.Trace().Interface("Pkg", p).Msg("Store")
+			s.Store(p)
 
 			http.Redirect(w, r, r.URL.Path, 302)
 		})
