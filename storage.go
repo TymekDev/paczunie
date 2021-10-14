@@ -4,8 +4,8 @@ import "sync"
 
 // Storage is used by Client for storing and providing Pkg objects.
 type Storage interface {
-	StorePkg(Pkg)
-	LoadPkgs() []Pkg
+	StorePkg(Pkg) error
+	LoadPkgs() ([]Pkg, error)
 }
 
 type sliceStorage struct {
@@ -16,14 +16,15 @@ type sliceStorage struct {
 
 var _ Storage = (*sliceStorage)(nil)
 
-func (s *sliceStorage) StorePkg(p Pkg) {
+func (s *sliceStorage) StorePkg(p Pkg) error {
 	s.Lock()
 	defer s.Unlock()
 	s.pkgs = append(s.pkgs, p)
+	return nil
 }
 
-func (s *sliceStorage) LoadPkgs() []Pkg {
+func (s *sliceStorage) LoadPkgs() ([]Pkg, error) {
 	s.Lock()
 	defer s.Unlock()
-	return s.pkgs
+	return s.pkgs, nil
 }

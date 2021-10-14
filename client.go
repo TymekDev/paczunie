@@ -47,7 +47,11 @@ func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) error {
-	if err := c.t.Execute(w, c.s.LoadPkgs()); err != nil {
+	pkgs, err := c.s.LoadPkgs()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	if err := c.t.Execute(w, pkgs); err != nil {
 		return errors.WithStack(err)
 	}
 	return nil
@@ -68,7 +72,9 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 		WithInpost(r.Form.Has("inpost")),
 		WithStatus(status),
 	)
-	c.s.StorePkg(p)
+	if err := c.s.StorePkg(p); err != nil {
+		return errors.WithStack(err)
+	}
 	log.Debug().Interface("Pkg", p).Msg("Stored package")
 
 	http.Redirect(w, r, r.URL.Path, 302)
