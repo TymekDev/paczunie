@@ -6,6 +6,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 )
 
 // Storage is used by Client for storing and providing Pkg objects.
@@ -35,12 +36,38 @@ func (s *sliceStorage) LoadPkgs() ([]Pkg, error) {
 	return s.pkgs, nil
 }
 
-type dbStorage sql.DB
+type dbStorage struct {
+	conn *sql.DB
+}
 
 var _ Storage = (*dbStorage)(nil)
 
 func (db *dbStorage) StorePkg(p Pkg) error {
-	return errors.New("not implemented")
+	tx, err := db.conn.Begin()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	const query = "INSERT INTO Packages(Name, Inpost, Status) VALUES (?, ?, ?)"
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		_ = tx.Rollback() // TODO: handle error
+		return errors.WithStack(err)
+	}
+
+	r, err := stmt.Exec(p.Name, p.Inpost, p.Status)
+	if err != nil {
+		_ = tx.Rollback() // TODO: handle error
+		return errors.WithStack(err)
+	}
+	log.Debug().Interface("result", r).Send()
+
+	if err := tx.Commit(); err != nil {
+		_ = tx.Rollback() // TODO: handle error
+		return errors.WithStack(err)
+	}
+
+	return nil
 }
 
 func (db *dbStorage) LoadPkgs() ([]Pkg, error) {
