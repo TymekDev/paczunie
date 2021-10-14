@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 )
@@ -11,6 +12,7 @@ import (
 // Client is responsible for handling HTTP requests. It fulfills http.Handler
 // interface.
 type Client struct {
+	r *mux.Router
 	s Storage
 	t *template.Template
 }
@@ -24,25 +26,23 @@ func NewClient(s Storage) (*Client, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, fName)
 	}
-	return &Client{s: s, t: t}, nil
+	c := &Client{r: mux.NewRouter(), s: s, t: t}
+	c.r.Methods("GET").HandlerFunc(c.handleError(c.handleGET))
+	c.r.Methods("POST").HandlerFunc(c.handleError(c.handlePOST))
+	return c, nil
 }
 
-// ServeHTTP handles the request with a dedicated handler function based on
-// request's method.
+// ServeHTTP calls ServeHTTP on underlying *mux.Router.
 func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	var err error
-	switch r.Method {
-	case "GET":
-		err = c.handleGET(w, r)
-	case "POST":
-		err = c.handlePOST(w, r)
-	default:
-		http.Error(w, "", http.StatusNotFound)
-		return
-	}
-	if err != nil {
-		log.Error().Stack().Err(errors.WithStack(err)).Send()
-		http.Error(w, "", http.StatusInternalServerError)
+	c.r.ServeHTTP(w, r)
+}
+
+func (c *Client) handleError(f func(http.ResponseWriter, *http.Request) error) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := f(w, r); err != nil {
+			log.Error().Stack().Err(errors.WithStack(err)).Send()
+			http.Error(w, "", http.StatusInternalServerError)
+		}
 	}
 }
 
