@@ -42,7 +42,6 @@ func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) {
 	const fName = "Client.handleGET"
-	log.Trace().Str("method", "GET").Msg("Serve template")
 	if err := c.t.Execute(w, c.s.Values()); err != nil {
 		err = errors.Wrap(err, fName)
 		log.Error().Stack().Err(err).Str("method", "GET").Send()
@@ -52,13 +51,13 @@ func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) {
 }
 func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) {
 	const fName = "Client.handlePOST"
-	log.Trace().Str("method", "POST").Msg("Receive form")
 	if err := r.ParseForm(); err != nil {
 		err = errors.Wrap(err, fName)
 		log.Error().Stack().Err(err).Str("method", "POST").Send()
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
+	log.Debug().Interface("form", r.Form).Msg("Parsed form")
 
 	status := Ordered
 	if r.Form.Has("shipped") {
@@ -69,8 +68,8 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) {
 		WithInpost(r.Form.Has("inpost")),
 		WithStatus(status),
 	)
-	log.Trace().Interface("Pkg", p).Msg("Store")
 	c.s.Store(p)
+	log.Debug().Interface("Pkg", p).Msg("Stored package")
 
 	http.Redirect(w, r, r.URL.Path, 302)
 }

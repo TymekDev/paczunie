@@ -13,14 +13,11 @@ import (
 func main() {
 	port := flag.Int("p", 8080, "port to listen on")
 	debug := flag.Bool("debug", false, "sets log level to debug")
-	trace := flag.Bool("trace", false, "sets log level to trace")
 	flag.Parse()
 
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	switch {
-	case *trace:
-		zerolog.SetGlobalLevel(zerolog.TraceLevel)
 	case *debug:
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	default:
