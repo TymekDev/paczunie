@@ -1,6 +1,12 @@
 package main
 
-import "sync"
+import (
+	"database/sql"
+	"sync"
+
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/pkg/errors"
+)
 
 // Storage is used by Client for storing and providing Pkg objects.
 type Storage interface {
@@ -27,4 +33,16 @@ func (s *sliceStorage) LoadPkgs() ([]Pkg, error) {
 	s.Lock()
 	defer s.Unlock()
 	return s.pkgs, nil
+}
+
+type dbStorage sql.DB
+
+var _ Storage = (*dbStorage)(nil)
+
+func (db *dbStorage) StorePkg(p Pkg) error {
+	return errors.New("not implemented")
+}
+
+func (db *dbStorage) LoadPkgs() ([]Pkg, error) {
+	return nil, errors.New("not implemented")
 }
