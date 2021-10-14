@@ -19,16 +19,20 @@ ul.packages {
 
 .si {
   background-size: contain;
+  cursor: pointer;
   display: inline-block;
   height: 32px;
   margin-right: 8px;
   opacity: 0.2;
+  transition: opacity 0.1s, transform 0.1s;
   vertical-align: middle;
   width: 32px;
 }
 
 .si.s-1 {
   background-image: url("icons8-payment-64.png");
+  cursor: default;
+  opacity: 1;
 }
 
 .si.s-2 {
@@ -39,8 +43,14 @@ ul.packages {
   background-image: url("icons8-package-64.png");
 }
 
-.si.s-1,
-.status-2 > .si:not(.s-3),
+.si.s-2:hover,
+.si.s-3:hover {
+  opacity: 1;
+  transition: opacity 0.1s, transform 0.1s;
+  transform: scale(110%);
+}
+
+.status-2 > .si.s-2,
 .status-3 > .si {
   opacity: 1;
 }
