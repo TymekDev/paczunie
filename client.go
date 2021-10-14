@@ -27,8 +27,13 @@ func NewClient(s Storage) (*Client, error) {
 		return nil, errors.Wrap(err, fName)
 	}
 	c := &Client{r: mux.NewRouter(), s: s, t: t}
-	c.r.Methods("GET").HandlerFunc(c.handleError(c.handleGET))
-	c.r.Methods("POST").HandlerFunc(c.handleError(c.handlePOST))
+	// TODO: prevent directory listing
+	c.r.Methods("GET").PathPrefix("/static").
+		Handler(http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
+	c.r.Methods("GET").
+		HandlerFunc(c.handleError(c.handleGET))
+	c.r.Methods("POST").
+		HandlerFunc(c.handleError(c.handlePOST))
 	return c, nil
 }
 
