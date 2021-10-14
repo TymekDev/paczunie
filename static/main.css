@@ -10,7 +10,7 @@ footer {
   text-align: center;
 }
 
-.status-icon {
+.si {
   background-size: contain;
   display: inline-block;
   height: 32px;
@@ -20,18 +20,20 @@ footer {
   width: 32px;
 }
 
-.status-icon.done {
-  opacity: 1;
-}
-
-.status-1 {
+.si.s-1 {
   background-image: url("icons8-payment-64.png");
 }
 
-.status-2 {
+.si.s-2 {
   background-image: url("icons8-drone-64.png");
 }
 
-.status-3 {
+.si.s-3 {
   background-image: url("icons8-package-64.png");
+}
+
+.si.s-1,
+.status-2 > .si:not(.s-3),
+.status-3 > .si {
+  opacity: 1;
 }
