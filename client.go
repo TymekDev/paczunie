@@ -49,6 +49,7 @@ func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) {
 	const fName = "Client.handlePOST"
 	if err := r.ParseForm(); err != nil {
