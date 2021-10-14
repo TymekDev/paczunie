@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"net/http"
@@ -24,7 +25,12 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
-	c, err := NewClient(&sliceStorage{})
+	db, err := sql.Open("sqlite3", "bazka.db")
+	if err != nil {
+		log.Fatal().Stack().Err(err).Send()
+	}
+
+	c, err := NewClient(newDBStorage(db))
 	if err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}

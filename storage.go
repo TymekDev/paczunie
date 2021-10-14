@@ -41,6 +41,12 @@ type dbStorage struct {
 
 var _ Storage = (*dbStorage)(nil)
 
+func newDBStorage(conn *sql.DB) *dbStorage {
+	return &dbStorage{
+		conn: conn,
+	}
+}
+
 func (db *dbStorage) StorePkg(p Pkg) error {
 	tx, err := db.conn.Begin()
 	if err != nil {
