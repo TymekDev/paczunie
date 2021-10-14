@@ -30,33 +30,31 @@ func NewClient(s Storage) (*Client, error) {
 // ServeHTTP handles the request with a dedicated handler function based on
 // request's method.
 func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	var err error
 	switch r.Method {
 	case "GET":
-		c.handleGET(w, r)
+		err = c.handleGET(w, r)
 	case "POST":
-		c.handlePOST(w, r)
+		err = c.handlePOST(w, r)
 	default:
 		http.Error(w, "", http.StatusNotFound)
 	}
-}
-
-func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) {
-	const fName = "Client.handleGET"
-	if err := c.t.Execute(w, c.s.Values()); err != nil {
-		err = errors.Wrap(err, fName)
-		log.Error().Stack().Err(err).Str("method", "GET").Send()
+	if err != nil {
+		log.Error().Stack().Err(errors.WithStack(err)).Send()
 		http.Error(w, "", http.StatusInternalServerError)
-		return
 	}
 }
 
-func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) {
-	const fName = "Client.handlePOST"
+func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) error {
+	if err := c.t.Execute(w, c.s.Values()); err != nil {
+		return errors.WithStack(err)
+	}
+	return nil
+}
+
+func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
-		err = errors.Wrap(err, fName)
-		log.Error().Stack().Err(err).Str("method", "POST").Send()
-		http.Error(w, "", http.StatusInternalServerError)
-		return
+		return errors.WithStack(err)
 	}
 	log.Debug().Interface("form", r.Form).Msg("Parsed form")
 
@@ -73,4 +71,6 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) {
 	log.Debug().Interface("Pkg", p).Msg("Stored package")
 
 	http.Redirect(w, r, r.URL.Path, 302)
+
+	return nil
 }
