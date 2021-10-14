@@ -9,3 +9,29 @@ footer {
   margin-top: 20px;
   text-align: center;
 }
+
+.status-icon {
+  background-size: contain;
+  display: inline-block;
+  height: 32px;
+  margin-right: 8px;
+  opacity: 0.2;
+  vertical-align: middle;
+  width: 32px;
+}
+
+.status-icon.done {
+  opacity: 1;
+}
+
+.status-1 {
+  background-image: url("icons8-order-64.png");
+}
+
+.status-2 {
+  background-image: url("icons8-drone-64.png");
+}
+
+.status-3 {
+  background-image: url("icons8-package-64.png");
+}
