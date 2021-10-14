@@ -8,6 +8,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Client is responsible for handling HTTP requests. It fulfills http.Handler
+// interface.
 type Client struct {
 	s Storage
 	t *template.Template
@@ -15,6 +17,7 @@ type Client struct {
 
 var _ http.Handler = (*Client)(nil)
 
+// NewClient creates a Client object associated with provided Storage.
 func NewClient(s Storage) (*Client, error) {
 	const fName = "NewClient"
 	t, err := template.ParseFiles("index.html")
@@ -24,6 +27,8 @@ func NewClient(s Storage) (*Client, error) {
 	return &Client{s: s, t: t}, nil
 }
 
+// ServeHTTP handles the request with a dedicated handler function based on
+// request's method.
 func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":

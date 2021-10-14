@@ -2,6 +2,7 @@ package main
 
 import "sync"
 
+// Storage is used by Client for storing and providing Pkg objects.
 type Storage interface {
 	Store(Pkg)
 	Values() []Pkg
