@@ -3,3 +3,9 @@ fieldset {
   gap: 30px;
   width: max-content;
 }
+
+footer {
+  font-size: 12px;
+  margin-top: 20px;
+  text-align: center;
+}
