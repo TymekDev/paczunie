@@ -24,7 +24,7 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
-	c, err := NewClient(&simpleStorage{})
+	c, err := NewClient(&sliceStorage{})
 	if err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}

@@ -8,11 +8,6 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type Storage interface {
-	Store(Pkg)
-	Values() []Pkg
-}
-
 type Client struct {
 	s Storage
 	t *template.Template
