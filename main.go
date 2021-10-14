@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -28,14 +27,13 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
-	s := &simpleStorage{}
-	r := mux.NewRouter()
-	if err := Register(r, s); err != nil {
+	c, err := NewClient(&simpleStorage{})
+	if err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}
 
 	log.Info().Int("port", *port).Msg("Started listening")
-	if err := http.ListenAndServe(fmt.Sprint(":", *port), r); err != nil {
+	if err := http.ListenAndServe(fmt.Sprint(":", *port), c); err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}
 }
