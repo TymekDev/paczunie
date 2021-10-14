@@ -71,5 +71,26 @@ func (db *dbStorage) StorePkg(p Pkg) error {
 }
 
 func (db *dbStorage) LoadPkgs() ([]Pkg, error) {
-	return nil, errors.New("not implemented")
+	const query = "SELECT Name, Inpost, Status FROM Packages"
+	rows, err := db.conn.Query(query)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	defer rows.Close()
+
+	var (
+		pkgs   []Pkg
+		name   string
+		inpost bool
+		status Status
+	)
+	for rows.Next() {
+		if err := rows.Scan(&name, &inpost, &status); err != nil {
+			return nil, errors.WithStack(err)
+		}
+		p := NewPkg(name, WithInpost(inpost), WithStatus(status))
+		pkgs = append(pkgs, p)
+	}
+
+	return pkgs, nil
 }
