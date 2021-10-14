@@ -38,6 +38,7 @@ func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		err = c.handlePOST(w, r)
 	default:
 		http.Error(w, "", http.StatusNotFound)
+		return
 	}
 	if err != nil {
 		log.Error().Stack().Err(errors.WithStack(err)).Send()
