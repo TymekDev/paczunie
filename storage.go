@@ -6,7 +6,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/pkg/errors"
-	"github.com/rs/zerolog/log"
 )
 
 // Storage is used by Client for storing and providing Pkg objects.
@@ -54,11 +53,9 @@ func (db *dbStorage) StorePkg(p Pkg) error {
 		return WithRollback(err, tx.Rollback())
 	}
 
-	r, err := stmt.Exec(p.Name, p.Inpost, p.Status)
-	if err != nil {
+	if _, err := stmt.Exec(p.Name, p.Inpost, p.Status); err != nil {
 		return WithRollback(err, tx.Rollback())
 	}
-	log.Debug().Interface("result", r).Send()
 
 	if err := tx.Commit(); err != nil {
 		return WithRollback(err, tx.Rollback())
