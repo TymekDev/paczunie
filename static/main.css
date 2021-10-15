@@ -17,12 +17,18 @@ ul.packages {
   list-style: none;
 }
 
+.status-icons {
+  display: inline-flex;
+  gap: 16px;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
 .si {
   background-size: contain;
   cursor: pointer;
   display: inline-block;
   height: 32px;
-  margin-right: 8px;
   opacity: 0.2;
   transition: opacity 0.1s, transform 0.1s;
   vertical-align: middle;
@@ -50,7 +56,7 @@ ul.packages {
   transform: scale(110%);
 }
 
-.statusi-2 > .si.si-2,
-.statusi-3 > .si {
+.status-2 > .status-icons > .si.si-2,
+.status-3 > .status-icons > .si {
   opacity: 1;
 }
