@@ -29,3 +29,26 @@ func TestStatusFromInt_Error(t *testing.T) {
 		})
 	}
 }
+
+func TestStatusFromString_Convert(t *testing.T) {
+	tests := []int{1, 2, 3}
+	for _, tt := range tests {
+		t.Run(strconv.Itoa(tt), func(t *testing.T) {
+			status, err := StatusFromString(strconv.Itoa(tt))
+			assert.NoError(t, err)
+			assert.Equal(t, Status(tt), status)
+		})
+	}
+}
+
+func TestStatusFromString_Error(t *testing.T) {
+	tests := []string{"", "0", "asdf", "xyz", "1.0"}
+
+	for _, tt := range tests {
+		t.Run(tt, func(t *testing.T) {
+			status, err := StatusFromString(tt)
+			assert.Equal(t, Status(0), status)
+			assert.Error(t, err)
+		})
+	}
+}

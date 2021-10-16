@@ -1,6 +1,10 @@
 package packages
 
-import "github.com/pkg/errors"
+import (
+	"strconv"
+
+	"github.com/pkg/errors"
+)
 
 // Status denotes current status of a Pkg.
 type Status int
@@ -22,4 +26,14 @@ func StatusFromInt(x int) (Status, error) {
 		return 0, errors.Errorf(msg, status, Ordered, Delivered)
 	}
 	return status, nil
+}
+
+// StatusFromString converts a string to a valid Status. It is a wrapper on
+// strconv.Atoi and StatusFromInt.
+func StatusFromString(s string) (Status, error) {
+	x, err := strconv.Atoi(s)
+	if err != nil {
+		return 0, errors.WithStack(err)
+	}
+	return StatusFromInt(x)
 }
