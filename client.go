@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"html/template"
 	"net/http"
 
@@ -19,17 +20,20 @@ type Client struct {
 
 var _ http.Handler = (*Client)(nil)
 
+//go:embed index.html static
+var _fs embed.FS
+
 // NewClient creates a Client object associated with provided Storage.
 func NewClient(s Storage) (*Client, error) {
 	const fName = "NewClient"
-	t, err := template.ParseFiles("index.html")
+	t, err := template.ParseFS(_fs, "index.html")
 	if err != nil {
 		return nil, errors.Wrap(err, fName)
 	}
 	c := &Client{r: mux.NewRouter(), s: s, t: t}
 	// TODO: prevent directory listing
 	c.r.Methods("GET").PathPrefix("/static").
-		Handler(http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
+		Handler(http.FileServer(http.FS(_fs)))
 	c.r.Methods("GET").
 		HandlerFunc(c.handleError(c.handleGET))
 	c.r.Methods("POST").
