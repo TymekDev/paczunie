@@ -2,8 +2,6 @@ package packages
 
 import (
 	"fmt"
-
-	"github.com/pkg/errors"
 )
 
 // RollbackError is a wrapper on an error for storing an additionall rollback
@@ -30,7 +28,7 @@ func (e rollbackError) Error() string {
 // is returned.
 func withRollback(err, rollbackErr error) error {
 	if rollbackErr == nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return rollbackError{
 		err:         err,
