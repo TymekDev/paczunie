@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -43,7 +44,40 @@ func TestNewPkg(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := NewPkg(tt.name, tt.options...)
-			assert.Equal(t, tt.want, p)
+			assert.Equal(t, tt.want.Name, p.Name)
+			assert.Equal(t, tt.want.Inpost, p.Inpost)
+			assert.Equal(t, tt.want.Status, p.Status)
+		})
+	}
+}
+
+// TODO: make UUID tests deterministic
+func TestUUIDOpt_apply(t *testing.T) {
+	tests := []uuid.UUID{
+		uuid.New(),
+		uuid.MustParse("00000000-0000-0000-0000-000000000000"),
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.String(), func(t *testing.T) {
+			p := Pkg{}
+			uuidOpt(tt).apply(&p)
+			assert.Equal(t, tt, p.ID)
+		})
+	}
+}
+
+func TestUUIDOpt_withUUID(t *testing.T) {
+	tests := []uuid.UUID{
+		uuid.New(),
+		uuid.MustParse("00000000-0000-0000-0000-000000000000"),
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.String(), func(t *testing.T) {
+			p := Pkg{}
+			withUUID(tt).apply(&p)
+			assert.Equal(t, tt, p.ID)
 		})
 	}
 }

@@ -24,7 +24,7 @@
       <h2>Lista przesyłek</h2>
       <ul class="packages">
         {{ range $pkg := . }}
-          <li class="status-{{ $pkg.Status }}">
+          <li id="{{ $pkg.ID }}" class="status-{{ $pkg.Status }}">
             <span class="status-icons">
               <i class="si si-1"></i>
               <i class="si si-2"></i>

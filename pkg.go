@@ -1,5 +1,7 @@
 package main
 
+import "github.com/google/uuid"
+
 // Status denotes current status of a Pkg.
 type Status int
 
@@ -14,6 +16,8 @@ const (
 
 // Pkg is a structure representing a single package entry.
 type Pkg struct {
+	// ID is an UUID assigned to package during its creation.
+	ID uuid.UUID
 	// Name is a package name given by the user.
 	Name string
 	// Inpost a flag whether package will arrive at Inpost parcel locker.
@@ -24,7 +28,7 @@ type Pkg struct {
 
 // NewPkg creates is a Pkg struct constructor.
 func NewPkg(name string, options ...PkgOption) Pkg {
-	p := Pkg{Name: name}
+	p := Pkg{ID: uuid.New(), Name: name}
 	for _, o := range options {
 		o.apply(&p)
 	}
@@ -34,6 +38,19 @@ func NewPkg(name string, options ...PkgOption) Pkg {
 // PkgOption is an interface used to pass options to NewPkg constructor.
 type PkgOption interface {
 	apply(*Pkg)
+}
+
+type uuidOpt uuid.UUID
+
+var _ PkgOption = uuidOpt{}
+
+func (o uuidOpt) apply(p *Pkg) {
+	p.ID = uuid.UUID(o)
+}
+
+// WithUUID returns a PkgOption setting ID field in Pkg struct.
+func withUUID(x uuid.UUID) PkgOption {
+	return uuidOpt(x)
 }
 
 type inpostOpt bool
