@@ -17,6 +17,7 @@ import (
 func main() {
 	port := flag.Int("p", 8080, "port to listen on")
 	debug := flag.Bool("debug", false, "sets log level to debug")
+	dbName := flag.String("db", "packages.db", "path to SQLite3 database")
 	flag.Parse()
 
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
@@ -28,7 +29,7 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
-	db, err := sql.Open("sqlite3", "bazka.db")
+	db, err := sql.Open("sqlite3", *dbName)
 	if err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}
