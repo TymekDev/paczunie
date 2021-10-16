@@ -14,20 +14,20 @@ type Storage interface {
 	LoadPkgs() ([]Pkg, error)
 }
 
-type dbStorage struct {
-	conn *sql.DB
+type DBStorage struct {
+	db *sql.DB
 }
 
-var _ Storage = (*dbStorage)(nil)
+var _ Storage = (*DBStorage)(nil)
 
-func newDBStorage(conn *sql.DB) *dbStorage {
-	return &dbStorage{
-		conn: conn,
+func NewDBStorage(db *sql.DB) *DBStorage {
+	return &DBStorage{
+		db: db,
 	}
 }
 
-func (db *dbStorage) StorePkg(p Pkg) error {
-	tx, err := db.conn.Begin()
+func (dbs *DBStorage) StorePkg(p Pkg) error {
+	tx, err := dbs.db.Begin()
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -49,9 +49,9 @@ func (db *dbStorage) StorePkg(p Pkg) error {
 	return nil
 }
 
-func (db *dbStorage) LoadPkgs() ([]Pkg, error) {
+func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 	const query = "SELECT ID, Name, Inpost, Status FROM Packages"
-	rows, err := db.conn.Query(query)
+	rows, err := dbs.db.Query(query)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

@@ -30,7 +30,7 @@ func main() {
 		log.Fatal().Stack().Err(err).Send()
 	}
 
-	c, err := NewClient(newDBStorage(db))
+	c, err := NewClient(NewDBStorage(db))
 	if err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}
