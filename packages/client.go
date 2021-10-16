@@ -25,10 +25,9 @@ var _ http.Handler = (*Client)(nil)
 
 // NewClient creates a Client object associated with provided Storage.
 func NewClient(s Storage) (*Client, error) {
-	const fName = "NewClient"
 	t, err := template.ParseFS(_fs, "index.html")
 	if err != nil {
-		return nil, errors.Wrap(err, fName)
+		return nil, errors.WithStack(err)
 	}
 	c := &Client{r: mux.NewRouter(), s: s, t: t}
 	// TODO: prevent directory listing
