@@ -44,7 +44,7 @@ func (o inpostOpt) apply(p *Pkg) {
 	p.Inpost = bool(o)
 }
 
-// WithInpost returns a PkgOption setting Inpost field in Pkg struct to true.
+// WithInpost returns a PkgOption setting Inpost field in Pkg struct.
 func WithInpost(x bool) PkgOption {
 	return inpostOpt(x)
 }
