@@ -17,6 +17,9 @@ var _ error = rollbackError{}
 
 func (e rollbackError) Error() string {
 	if e.rollbackErr == nil {
+		if e.err == nil {
+			return ""
+		}
 		return e.err.Error()
 	}
 	const format = "%s (additionally, rollback failed: %s)"
