@@ -28,7 +28,7 @@ type Pkg struct {
 
 // NewPkg creates is a Pkg struct constructor.
 func NewPkg(name string, options ...PkgOption) Pkg {
-	p := Pkg{ID: uuid.New(), Name: name}
+	p := Pkg{ID: uuid.New(), Name: name, Status: Ordered}
 	for _, o := range options {
 		o.apply(&p)
 	}
