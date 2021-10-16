@@ -9,6 +9,8 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+
+	"packages/packages"
 )
 
 func main() {
@@ -30,7 +32,7 @@ func main() {
 		log.Fatal().Stack().Err(err).Send()
 	}
 
-	c, err := NewClient(NewDBStorage(db))
+	c, err := packages.NewClient(packages.NewDBStorage(db))
 	if err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}
