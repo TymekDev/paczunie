@@ -10,6 +10,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+//go:embed index.html static
+var _fs embed.FS
+
 // Client is responsible for handling HTTP requests. It fulfills http.Handler
 // interface.
 type Client struct {
@@ -19,9 +22,6 @@ type Client struct {
 }
 
 var _ http.Handler = (*Client)(nil)
-
-//go:embed index.html static
-var _fs embed.FS
 
 // NewClient creates a Client object associated with provided Storage.
 func NewClient(s Storage) (*Client, error) {
