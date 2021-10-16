@@ -20,7 +20,9 @@ type DBStorage struct {
 
 var _ Storage = (*DBStorage)(nil)
 
-// NewDBStorage creates a DBStorage that fulfills Storage interface.
+// NewDBStorage creates a DBStorage that fulfills Storage interface. It is
+// checked whether provided database contains Packages(ID, Name, Inpost, Status)
+// table.
 func NewDBStorage(db *sql.DB) (*DBStorage, error) {
 	const query = "SELECT ID, Name, Inpost, Status FROM Packages"
 	if _, err := db.Query(query); err != nil {
