@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"sync"
 
 	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
@@ -13,27 +12,6 @@ import (
 type Storage interface {
 	StorePkg(Pkg) error
 	LoadPkgs() ([]Pkg, error)
-}
-
-type sliceStorage struct {
-	sync.Mutex
-
-	pkgs []Pkg
-}
-
-var _ Storage = (*sliceStorage)(nil)
-
-func (s *sliceStorage) StorePkg(p Pkg) error {
-	s.Lock()
-	defer s.Unlock()
-	s.pkgs = append(s.pkgs, p)
-	return nil
-}
-
-func (s *sliceStorage) LoadPkgs() ([]Pkg, error) {
-	s.Lock()
-	defer s.Unlock()
-	return s.pkgs, nil
 }
 
 type dbStorage struct {
