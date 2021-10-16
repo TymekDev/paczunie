@@ -2,18 +2,6 @@ package packages
 
 import "github.com/google/uuid"
 
-// Status denotes current status of a Pkg.
-type Status int
-
-const (
-	// Ordered Status means that an order has been placed.
-	Ordered Status = iota + 1
-	// Shipped Status means that a package has been posted.
-	Shipped
-	// Delivered Status means that a package has been delivered.
-	Delivered
-)
-
 // Pkg is a structure representing a single package entry.
 type Pkg struct {
 	// ID is an UUID assigned to package during its creation.
