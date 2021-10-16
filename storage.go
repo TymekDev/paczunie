@@ -39,15 +39,15 @@ func (dbs *DBStorage) StorePkg(p Pkg) error {
 	const query = "INSERT INTO Packages(ID, Name, Inpost, Status) VALUES (?, ?, ?, ?)"
 	stmt, err := tx.Prepare(query)
 	if err != nil {
-		return WithRollback(err, tx.Rollback())
+		return withRollback(err, tx.Rollback())
 	}
 
 	if _, err := stmt.Exec(p.ID, p.Name, p.Inpost, p.Status); err != nil {
-		return WithRollback(err, tx.Rollback())
+		return withRollback(err, tx.Rollback())
 	}
 
 	if err := tx.Commit(); err != nil {
-		return WithRollback(err, tx.Rollback())
+		return withRollback(err, tx.Rollback())
 	}
 
 	return nil
