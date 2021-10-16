@@ -14,8 +14,8 @@ const (
 	Delivered
 )
 
-// ToStatus converts an integer to a valid Status.
-func ToStatus(x int) (Status, error) {
+// StatusFromInt converts an integer to a valid Status.
+func StatusFromInt(x int) (Status, error) {
 	status := Status(x)
 	if status < Ordered || status > Delivered {
 		const msg = "Status value (%d) out of range (%d - %d)"
