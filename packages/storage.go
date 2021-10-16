@@ -21,10 +21,16 @@ type DBStorage struct {
 var _ Storage = (*DBStorage)(nil)
 
 // NewDBStorage creates a DBStorage that fulfills Storage interface.
-func NewDBStorage(db *sql.DB) *DBStorage {
-	return &DBStorage{
+func NewDBStorage(db *sql.DB) (*DBStorage, error) {
+	const query = "SELECT ID, Name, Inpost, Status FROM Packages"
+	if _, err := db.Query(query); err != nil {
+		const msg = "table not found: Packages(ID, Name, Inpost, Status)"
+		return nil, errors.New(msg)
+	}
+	dbs := &DBStorage{
 		db: db,
 	}
+	return dbs, nil
 }
 
 // StorePkg saves p into a Packages table via DBStorage's underlying database

@@ -34,7 +34,12 @@ func main() {
 		log.Fatal().Stack().Err(err).Send()
 	}
 
-	c, err := packages.NewClient(packages.NewDBStorage(db))
+	dbs, err := packages.NewDBStorage(db)
+	if err != nil {
+		log.Fatal().Stack().Err(err).Send()
+	}
+
+	c, err := packages.NewClient(dbs)
 	if err != nil {
 		log.Fatal().Stack().Err(err).Send()
 	}
