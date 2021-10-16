@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -37,6 +38,8 @@ func NewClient(s Storage) (*Client, error) {
 		HandlerFunc(c.handleError(c.handleGET))
 	c.r.Methods("POST").
 		HandlerFunc(c.handleError(c.handlePOST))
+	c.r.Methods("PATCH").
+		HandlerFunc(c.handleError(c.handlePATCH))
 	return c, nil
 }
 
@@ -86,6 +89,30 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	log.Debug().Interface("Pkg", p).Msg("Stored package")
 
 	http.Redirect(w, r, r.URL.Path, 302)
+
+	return nil
+}
+
+func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
+		return errors.WithStack(err)
+	}
+	log.Debug().Interface("form", r.Form).Msg("Parsed form")
+
+	id, err := uuid.Parse(r.Form.Get("id"))
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	status, err := StatusFromString(r.Form.Get("status"))
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	if err := c.s.UpdateStatus(id, status); err != nil {
+		return errors.WithStack(err)
+	}
+	log.Debug().Interface("id", id).Interface("status", status).Msg("Updated status")
 
 	return nil
 }
