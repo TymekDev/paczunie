@@ -17,12 +17,12 @@ func TestNewPkg(t *testing.T) {
 		{
 			"none",
 			[]PkgOption{},
-			Pkg{Name: "none"},
+			Pkg{Name: "none", Status: Ordered},
 		},
 		{
 			"inpost",
 			[]PkgOption{WithInpost(true)},
-			Pkg{Name: "inpost", Inpost: true},
+			Pkg{Name: "inpost", Inpost: true, Status: Ordered},
 		},
 		{
 			"status_1",
