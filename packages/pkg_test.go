@@ -20,6 +20,17 @@ func TestNewPkg(t *testing.T) {
 			Pkg{Name: "none", Status: Ordered},
 		},
 		{
+			"uuid",
+			[]PkgOption{
+				withUUID(uuid.MustParse("00000000-0000-0000-0000-000000000000")),
+			},
+			Pkg{
+				ID:     uuid.MustParse("00000000-0000-0000-0000-000000000000"),
+				Name:   "uuid",
+				Status: Ordered,
+			},
+		},
+		{
 			"inpost",
 			[]PkgOption{WithInpost(true)},
 			Pkg{Name: "inpost", Inpost: true, Status: Ordered},
@@ -38,6 +49,20 @@ func TestNewPkg(t *testing.T) {
 			"inpost_status",
 			[]PkgOption{WithInpost(true), WithStatus(Ordered)},
 			Pkg{Name: "inpost_status", Inpost: true, Status: Ordered},
+		},
+		{
+			"uuid_inpost_status_uuid",
+			[]PkgOption{
+				withUUID(uuid.MustParse("00000000-0000-0000-0000-000000000000")),
+				WithInpost(true),
+				WithStatus(Ordered),
+			},
+			Pkg{
+				ID:     uuid.MustParse("00000000-0000-0000-0000-000000000000"),
+				Name:   "uuid_inpost_status_uuid",
+				Inpost: true,
+				Status: Ordered,
+			},
 		},
 	}
 
