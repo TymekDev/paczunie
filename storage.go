@@ -14,18 +14,22 @@ type Storage interface {
 	LoadPkgs() ([]Pkg, error)
 }
 
+// DBStorage is a wrapper on provided *sql.DB fulfilling Storage interface.
 type DBStorage struct {
 	db *sql.DB
 }
 
 var _ Storage = (*DBStorage)(nil)
 
+// NewDBStorage creates a DBStorage that fulfills Storage interface.
 func NewDBStorage(db *sql.DB) *DBStorage {
 	return &DBStorage{
 		db: db,
 	}
 }
 
+// StorePkg saves p into a Packages table via DBStorage's underlying database
+// connection.
 func (dbs *DBStorage) StorePkg(p Pkg) error {
 	tx, err := dbs.db.Begin()
 	if err != nil {
@@ -49,6 +53,8 @@ func (dbs *DBStorage) StorePkg(p Pkg) error {
 	return nil
 }
 
+// LoadPkgs returns a []Pkg slice read from DBStorage's underlying database
+// connection.
 func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 	const query = "SELECT ID, Name, Inpost, Status FROM Packages"
 	rows, err := dbs.db.Query(query)
