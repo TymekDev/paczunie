@@ -1,12 +1,14 @@
 package packages
 
 import (
+	"database/sql"
 	"embed"
 	"html/template"
 	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3" // SQLite3 database driver
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 )
@@ -41,6 +43,22 @@ func NewClient(s Storage) (*Client, error) {
 	c.r.Methods("PATCH").
 		HandlerFunc(c.handleError(c.handlePATCH))
 	return c, nil
+}
+
+// NewClientWithSQLiteStorage is a wrapper on opening connection to SQLite3
+// database, creating a Storage with it, and creating Client with the Storage.
+func NewClientWithSQLiteStorage(dbName string) (*Client, error) {
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	dbs, err := NewDBStorage(db)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return NewClient(dbs)
 }
 
 // ServeHTTP calls ServeHTTP on underlying *mux.Router.
