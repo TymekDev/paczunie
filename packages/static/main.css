@@ -21,6 +21,7 @@ ul.packages {
   display: inline-flex;
   gap: 16px;
   margin-right: 12px;
+  user-select: none;
   vertical-align: middle;
 }
 
