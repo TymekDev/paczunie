@@ -89,10 +89,9 @@ func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
-	if err := r.ParseForm(); err != nil {
+	if err := parseForm(r, "POST"); err != nil {
 		return errors.WithStack(err)
 	}
-	log.Debug().Interface("form", r.Form).Msg("Parsed form")
 
 	name := r.Form.Get("name")
 	if name == "" {
@@ -119,10 +118,9 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
-	if err := r.ParseForm(); err != nil {
+	if err := parseForm(r, "PATCH"); err != nil {
 		return errors.WithStack(err)
 	}
-	log.Debug().Interface("form", r.Form).Msg("Parsed form")
 
 	id, err := uuid.Parse(r.Form.Get("id"))
 	if err != nil {
@@ -145,10 +143,9 @@ func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
-	if err := r.ParseForm(); err != nil {
+	if err := parseForm(r, "DELETE"); err != nil {
 		return errors.WithStack(err)
 	}
-	log.Debug().Interface("form", r.Form).Msg("Parsed form")
 
 	id, err := uuid.Parse(r.Form.Get("id"))
 	if err != nil {
@@ -160,5 +157,13 @@ func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
 	}
 	log.Debug().Interface("id", id).Msg("Deleted package")
 
+	return nil
+}
+
+func parseForm(r *http.Request, m string) error {
+	if err := r.ParseForm(); err != nil {
+		return errors.WithStack(err)
+	}
+	log.Debug().Interface("form", r.Form).Str("method", m).Msg("Parsed form")
 	return nil
 }
