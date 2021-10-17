@@ -31,7 +31,7 @@ const updateStatus = function(id, s) {
     updatePkgStatusClassById(id, xhr.response);
   });
   xhr.open('PATCH', '/');
-  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.send(`id=${id}&status=${s}`);
 }
 
