@@ -132,7 +132,7 @@ func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
 		return errors.WithStack(err)
 	}
 
-	if err := c.s.UpdateStatus(id, status); err != nil {
+	if err := c.s.UpdatePkgStatus(id, status); err != nil {
 		return errors.WithStack(err)
 	}
 	log.Debug().Interface("id", id).Interface("status", status).Msg("Updated status")
