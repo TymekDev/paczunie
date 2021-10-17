@@ -109,7 +109,7 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	if err := c.s.StorePkg(p); err != nil {
 		return errors.WithStack(err)
 	}
-	log.Debug().Interface("Pkg", p).Msg("Stored package")
+	log.Debug().Interface("pkg", p).Msg("Stored package")
 
 	http.Redirect(w, r, r.URL.Path, 302)
 
