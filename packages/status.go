@@ -37,3 +37,7 @@ func StatusFromString(s string) (Status, error) {
 	}
 	return StatusFromInt(x)
 }
+
+func (s Status) String() string {
+	return strconv.Itoa(int(s))
+}

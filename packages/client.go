@@ -137,5 +137,7 @@ func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
 	}
 	log.Debug().Interface("id", id).Interface("status", status).Msg("Updated status")
 
+	w.Write([]byte(status.String()))
+
 	return nil
 }
