@@ -3,13 +3,22 @@ window.onload = function() {
 }
 
 const addIconClickHandler = function(icon) {
-  const id = icon.closest('li[id]').id;
+  const pkg = icon.closest('li[id]');
+  const id = pkg.id;
   const s = getIconStatus(icon);
-  icon.addEventListener('click', () => updateStatus(id, s));
+  icon.addEventListener('click', () => {
+    if (getPkgStatus(pkg) !== s) {
+      updateStatus(id, s);
+    }
+  });
 }
 
 const getIconStatus = function(icon) {
   return icon.className.match(/si-([1-3])/)[1];
+}
+
+const getPkgStatus = function(pkg) {
+  return pkg.className.match(/status-([1-3])/)[1];
 }
 
 const updateStatus = function(id, s) {
