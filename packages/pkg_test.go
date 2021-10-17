@@ -85,7 +85,7 @@ func TestUUIDOpt_apply(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.String(), func(t *testing.T) {
-			p := Pkg{}
+			var p Pkg
 			uuidOpt(tt).apply(&p)
 			assert.Equal(t, tt, p.ID)
 		})
@@ -100,7 +100,7 @@ func TestUUIDOpt_withUUID(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.String(), func(t *testing.T) {
-			p := Pkg{}
+			var p Pkg
 			withUUID(tt).apply(&p)
 			assert.Equal(t, tt, p.ID)
 		})
@@ -115,7 +115,7 @@ func TestInpostOpt_apply(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(strconv.FormatBool(tt), func(t *testing.T) {
-			p := Pkg{}
+			var p Pkg
 			inpostOpt(tt).apply(&p)
 			assert.Equal(t, tt, p.Inpost)
 		})
@@ -130,7 +130,7 @@ func TestInpostOpt_WithInpost(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(strconv.FormatBool(tt), func(t *testing.T) {
-			p := Pkg{}
+			var p Pkg
 			WithInpost(tt).apply(&p)
 			assert.Equal(t, tt, p.Inpost)
 		})
@@ -146,7 +146,7 @@ func TestStatusOpt_apply(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(strconv.Itoa(int(tt)), func(t *testing.T) {
-			p := Pkg{}
+			var p Pkg
 			statusOpt(tt).apply(&p)
 			assert.Equal(t, tt, p.Status)
 		})
@@ -162,7 +162,7 @@ func TestStatusOpt_WithStatus(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(strconv.Itoa(int(tt)), func(t *testing.T) {
-			p := Pkg{}
+			var p Pkg
 			WithStatus(tt).apply(&p)
 			assert.Equal(t, tt, p.Status)
 		})
