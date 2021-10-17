@@ -12,6 +12,7 @@ type Storage interface {
 	StorePkg(Pkg) error
 	LoadPkgs() ([]Pkg, error)
 	UpdateStatus(uuid.UUID, Status) error
+	DeletePkg(uuid.UUID) error
 }
 
 // DBStorage is a wrapper on provided *sql.DB fulfilling Storage interface.
@@ -93,6 +94,15 @@ func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 func (dbs *DBStorage) UpdateStatus(id uuid.UUID, status Status) error {
 	const query = "UPDATE Packages SET Status = ? WHERE ID = ?"
 	if _, err := dbs.db.Exec(query, status, id); err != nil {
+		return errors.WithStack(err)
+	}
+	return nil
+}
+
+// DeletePkg deletes a package entry with provided ID.
+func (dbs *DBStorage) DeletePkg(id uuid.UUID) error {
+	const query = "DELETE FROM Packages WHERE ID = ?"
+	if _, err := dbs.db.Exec(query, id); err != nil {
 		return errors.WithStack(err)
 	}
 	return nil
