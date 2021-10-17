@@ -92,12 +92,17 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	}
 	log.Debug().Interface("form", r.Form).Msg("Parsed form")
 
+	name := r.Form.Get("name")
+	if name == "" {
+		const msg = "empty name provided"
+		return errors.New(msg)
+	}
 	status := Ordered
 	if r.Form.Has("shipped") {
 		status = Shipped
 	}
 	p := NewPkg(
-		r.Form.Get("name"),
+		name,
 		WithInpost(r.Form.Has("inpost")),
 		WithStatus(status),
 	)
