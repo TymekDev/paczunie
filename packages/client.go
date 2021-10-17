@@ -42,6 +42,8 @@ func NewClient(s Storage) (*Client, error) {
 		HandlerFunc(c.handleError(c.handlePOST))
 	c.r.Methods("PATCH").
 		HandlerFunc(c.handleError(c.handlePATCH))
+	c.r.Methods("DELETE").
+		HandlerFunc(c.handleError(c.handleDELETE))
 	return c, nil
 }
 
@@ -138,6 +140,25 @@ func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
 	log.Debug().Interface("id", id).Interface("status", status).Msg("Updated status")
 
 	w.Write([]byte(status.String()))
+
+	return nil
+}
+
+func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
+		return errors.WithStack(err)
+	}
+	log.Debug().Interface("form", r.Form).Msg("Parsed form")
+
+	id, err := uuid.Parse(r.Form.Get("id"))
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	if err := c.s.DeletePkg(id); err != nil {
+		return errors.WithStack(err)
+	}
+	log.Debug().Interface("id", id).Msg("Deleted package")
 
 	return nil
 }
