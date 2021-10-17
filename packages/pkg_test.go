@@ -16,7 +16,7 @@ func TestNewPkg(t *testing.T) {
 	}{
 		{
 			"none",
-			[]PkgOption{},
+			nil,
 			Pkg{Name: "none", Status: Ordered},
 		},
 		{
