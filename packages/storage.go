@@ -40,25 +40,10 @@ func NewDBStorage(db *sql.DB) (*DBStorage, error) {
 // StorePkg saves p into a Packages table via DBStorage's underlying database
 // connection.
 func (dbs *DBStorage) StorePkg(p Pkg) error {
-	tx, err := dbs.db.Begin()
-	if err != nil {
+	const query = "INSERT INTO Packages(ID, Name, Inpost, Status) VALUES (?, ?, ?, ?)"
+	if _, err := dbs.db.Exec(query, p.ID, p.Name, p.Inpost, p.Status); err != nil {
 		return errors.WithStack(err)
 	}
-
-	const query = "INSERT INTO Packages(ID, Name, Inpost, Status) VALUES (?, ?, ?, ?)"
-	stmt, err := tx.Prepare(query)
-	if err != nil {
-		return errors.WithStack(withRollback(err, tx.Rollback()))
-	}
-
-	if _, err := stmt.Exec(p.ID, p.Name, p.Inpost, p.Status); err != nil {
-		return errors.WithStack(withRollback(err, tx.Rollback()))
-	}
-
-	if err := tx.Commit(); err != nil {
-		return errors.WithStack(withRollback(err, tx.Rollback()))
-	}
-
 	return nil
 }
 
