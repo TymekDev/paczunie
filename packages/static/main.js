@@ -14,11 +14,11 @@ const addIconClickHandler = function(icon) {
 }
 
 const getIconStatus = function(icon) {
-  return icon.className.match(/si-([1-3])/)[1];
+  return icon.className.match(/si-([1-9])/)[1];
 }
 
 const getPkgStatus = function(pkg) {
-  return pkg.className.match(/status-([1-3])/)[1];
+  return pkg.className.match(/status-([1-9])/)[1];
 }
 
 const updateStatus = function(id, s) {
@@ -37,7 +37,7 @@ const updateStatus = function(id, s) {
 
 const updatePkgStatusClassById = function(id, s) {
   const pkg = document.getElementById(id);
-  pkg.className = pkg.className.replace(/status-[1-3]/, `status-${s}`);
+  pkg.className = pkg.className.replace(/status-[1-9]/, `status-${s}`);
 }
 
 const deletePkg = function(id) {
