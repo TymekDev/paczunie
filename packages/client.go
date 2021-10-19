@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"embed"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -143,11 +144,16 @@ func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
-	if err := parseForm(r, "DELETE"); err != nil {
+	// For some reason it is not possible to use URL encoded form with DELETE
+	// using XMLHttpRequest in JS.
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
 		return errors.WithStack(err)
 	}
+	s := string(b)
+	log.Debug().Str("body", s).Str("method", "DELETE").Msg("Read body")
 
-	id, err := uuid.Parse(r.Form.Get("id"))
+	id, err := uuid.Parse(s)
 	if err != nil {
 		return errors.WithStack(err)
 	}
