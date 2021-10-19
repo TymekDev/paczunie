@@ -48,8 +48,11 @@ ul.packages {
 }
 
 .status-1 > .status-icons > .si.si-1,
-.status-2 > .status-icons > .si:not(.si-3),
-.status-3 > .status-icons > .si {
+.status-2 > .status-icons > .si.si-1,
+.status-2 > .status-icons > .si.si-2,
+.status-3 > .status-icons > .si.si-1,
+.status-3 > .status-icons > .si.si-2,
+.status-3 > .status-icons > .si.si-3 {
   opacity: 1;
 }
 
