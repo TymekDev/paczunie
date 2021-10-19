@@ -44,6 +44,10 @@ ul.packages {
 }
 
 .si.si-3 {
+  background-image: url("icons8-packages-64.png");
+}
+
+.si.si-4 {
   background-image: url("icons8-package-64.png");
 }
 
@@ -52,13 +56,15 @@ ul.packages {
 .status-2 > .status-icons > .si.si-2,
 .status-3 > .status-icons > .si.si-1,
 .status-3 > .status-icons > .si.si-2,
-.status-3 > .status-icons > .si.si-3 {
+.status-3 > .status-icons > .si.si-3,
+.status-4 > .status-icons > .si {
   opacity: 1;
 }
 
 .status-1 > .status-icons > .si:not(.si-1):hover,
 .status-2 > .status-icons > .si:not(.si-2):hover,
-.status-3 > .status-icons > .si:not(.si-3):hover {
+.status-3 > .status-icons > .si:not(.si-3):hover,
+.status-4 > .status-icons > .si:not(.si-4):hover {
   cursor: pointer;
   opacity: 1;
   transform: scale(110%);

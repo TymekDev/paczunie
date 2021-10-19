@@ -29,7 +29,8 @@
             <span class="status-icons">
               <i class="si si-1"></i>
               <i class="si si-2"></i>
-              <i class="si si-3"></i>
+              {{ if $pkg.Inpost }}<i class="si si-3"></i>{{ end }}
+              <i class="si si-4"></i>
             </span>
             <span>
               {{ $pkg.Name }}
@@ -46,7 +47,8 @@
       <span>·</span>
       <span>
         <a href="https://icons8.com/icon/MsepWqZ28ZfG/checklist" target="_blank">Checklist</a>,
-        <a href="https://icons8.com/icon/TIUhjwXAGNKn/delivery-truck" target="_blank">Delivery Truck</a>, and
+        <a href="https://icons8.com/icon/TIUhjwXAGNKn/delivery-truck" target="_blank">Delivery Truck</a>,
+        <a href="https://icons8.com/icon/K5opL9ey0dGT/packages" target="_blank">Packages</a>, and
         <a href="https://icons8.com/icon/7EwPwbPoLFgi/package" target="_blank">Package</a> icons by
         <a href="https://icons8.com" target="_blank">Icons8</a>
       </span>

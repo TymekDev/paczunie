@@ -8,7 +8,7 @@ import (
 )
 
 func TestStatusFromInt_Convert(t *testing.T) {
-	tests := []int{1, 2, 3}
+	tests := []int{1, 2, 3, 4}
 	for _, tt := range tests {
 		t.Run(strconv.Itoa(tt), func(t *testing.T) {
 			status, err := StatusFromInt(tt)
@@ -19,7 +19,7 @@ func TestStatusFromInt_Convert(t *testing.T) {
 }
 
 func TestStatusFromInt_Error(t *testing.T) {
-	tests := []int{-999, -100, -1, 0, 4, 5, 100, 999}
+	tests := []int{-999, -100, -1, 0, 5, 100, 999}
 
 	for _, tt := range tests {
 		t.Run(strconv.Itoa(tt), func(t *testing.T) {
@@ -31,7 +31,7 @@ func TestStatusFromInt_Error(t *testing.T) {
 }
 
 func TestStatusFromString_Convert(t *testing.T) {
-	tests := []int{1, 2, 3}
+	tests := []int{1, 2, 3, 4}
 	for _, tt := range tests {
 		t.Run(strconv.Itoa(tt), func(t *testing.T) {
 			status, err := StatusFromString(strconv.Itoa(tt))
