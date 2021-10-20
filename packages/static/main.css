@@ -17,6 +17,11 @@ ul.packages {
   list-style: none;
 }
 
+ul.packages > li {
+  align-items: center;
+  display: flex;
+}
+
 .status-icons {
   display: inline-flex;
   gap: 16px;
