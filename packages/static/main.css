@@ -14,14 +14,14 @@ footer {
   text-align: center;
 }
 
-ul.packages {
+.packages {
   display: flex;
   flex-flow: column;
   gap: 10px;
-  list-style: none;
+  margin: 20px;
 }
 
-ul.packages > li {
+.packages > .package {
   align-items: center;
   display: flex;
 }

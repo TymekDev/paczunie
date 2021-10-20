@@ -3,7 +3,7 @@ window.onload = function() {
 }
 
 const addIconClickHandler = function(icon) {
-  const pkg = icon.closest('li[id]');
+  const pkg = icon.closest('.package');
   const id = pkg.id;
   const s = getIconStatus(icon);
   icon.addEventListener('click', () => {
