@@ -113,7 +113,8 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	}
 	log.Debug().Interface("pkg", p).Msg("Stored package")
 
-	http.Redirect(w, r, r.URL.Path, 302)
+	// r.URL.Path is needed in case Client listend on a different handle than "/"
+	http.Redirect(w, r, r.URL.Path, http.StatusMovedPermanently)
 
 	return nil
 }
