@@ -74,6 +74,7 @@ func (c *Client) handleError(f func(http.ResponseWriter, *http.Request) error) h
 		if err := f(w, r); err != nil {
 			log.Error().Stack().Err(errors.WithStack(err)).Send()
 			http.Error(w, "", http.StatusInternalServerError)
+			return
 		}
 	}
 }
