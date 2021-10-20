@@ -12,8 +12,8 @@ footer {
 
 ul.packages {
   display: flex;
-  gap: 10px;
   flex-flow: column;
+  gap: 10px;
   list-style: none;
 }
 
