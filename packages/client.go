@@ -72,7 +72,7 @@ func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (c *Client) handleError(f func(http.ResponseWriter, *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := f(w, r); err != nil {
-			log.Error().Stack().Err(errors.WithStack(err)).Send()
+			log.Error().Stack().Err(err).Send()
 			http.Error(w, "", http.StatusInternalServerError)
 			return
 		}
@@ -82,7 +82,7 @@ func (c *Client) handleError(f func(http.ResponseWriter, *http.Request) error) h
 func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) error {
 	pkgs, err := c.s.LoadPkgs()
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	if err := c.t.Execute(w, pkgs); err != nil {
 		return errors.WithStack(err)

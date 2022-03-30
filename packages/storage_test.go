@@ -24,3 +24,11 @@ func TestDBStorage_NewDBStorage(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, db, dbs.db)
 }
+
+func TestDBStorage_StorePkg(t *testing.T) {
+	// TODO: add tests
+}
+
+func TestDBStorage_LoadPkgs(t *testing.T) {
+	// TODO: add tests
+}

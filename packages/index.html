@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Przesyłki</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
-    <link rel="stylesheet" href="static/main.css">
-    <script src="static/main.js"></script>
-  </head>
-  <body>
-    <div>
-      <h2>Nowa przesyłka</h2>
-      <form action="/" method="post" autocomplete="off">
-        <div>
-          <input type="text" name="name" placeholder="Nazwa" required>
-          <fieldset>
-            <legend>Ustawienia</legend>
-            <label><input type="checkbox" name="inpost"> Inpost</label>
-            <label><input type="checkbox" name="shipped"> W drodze</label>
-          </fieldset>
-        </div>
-        <div>
-          <input type="submit" value="Dodaj">
-        </div>
-      </form>
-    </div>
-    <div>
-      <h2>Lista przesyłek</h2>
-      <div class="packages">
-        {{ range $pkg := . }}
-          <div id="{{ $pkg.ID }}" class="package status-{{ $pkg.Status }}">
-            <span class="status-icons">
-              <i class="si si-1"></i>
-              <i class="si si-2"></i>
-              {{ if $pkg.Inpost }}<i class="si si-3"></i>{{ end }}
-              <i class="si si-4"></i>
-            </span>
-            <span>
-              {{ $pkg.Name }}
-            </span>
-          </div>
-        {{ end }}
+
+<head>
+  <title>Przesyłki</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+  <link rel="stylesheet" href="static/main.css">
+  <script src="static/main.js"></script>
+</head>
+
+<body>
+  <div>
+    <h2>Nowa przesyłka</h2>
+    <form action="/" method="post" autocomplete="off">
+      <div>
+        <input type="text" name="name" placeholder="Nazwa" required>
+        <fieldset>
+          <legend>Ustawienia</legend>
+          <label><input type="checkbox" name="inpost"> Inpost</label>
+          <label><input type="checkbox" name="shipped"> W drodze</label>
+        </fieldset>
       </div>
+      <div>
+        <input type="submit" value="Dodaj">
+      </div>
+    </form>
+  </div>
+  <div>
+    <h2>Lista przesyłek</h2>
+    <div class="packages">
+      {{ range $pkg := . }}
+      <div id="{{ $pkg.ID }}" class="package status-{{ $pkg.Status }}">
+        <span class="status-icons">
+          <i class="si si-1"></i>
+          <i class="si si-2"></i>
+          {{ if $pkg.Inpost }}<i class="si si-3"></i>{{ end }}
+          <i class="si si-4"></i>
+        </span>
+        <span>
+          {{ $pkg.Name }}
+        </span>
+      </div>
+      {{ end }}
     </div>
-    <footer>
-      <span>
-        Stylised by
-        <a href="https://watercss.kognise.dev/" target="_blank">water.css</a>
-      </span>
-      <span>·</span>
-      <span>
-        <a href="https://icons8.com/icon/MsepWqZ28ZfG/checklist" target="_blank">Checklist</a>,
-        <a href="https://icons8.com/icon/TIUhjwXAGNKn/delivery-truck" target="_blank">Delivery Truck</a>,
-        <a href="https://icons8.com/icon/K5opL9ey0dGT/packages" target="_blank">Packages</a>, and
-        <a href="https://icons8.com/icon/7EwPwbPoLFgi/package" target="_blank">Package</a> icons by
-        <a href="https://icons8.com" target="_blank">Icons8</a>
-      </span>
-      <span>·</span>
-      <span>
-        View source on
-        <a href="https://github.com/tmakowski/przesylki" target="_blank">GitHub</a>
-      </span>
-    </footer>
-  </body>
+  </div>
+  <footer>
+    <span>
+      Stylised by
+      <a href="https://watercss.kognise.dev/" target="_blank">water.css</a>
+    </span>
+    <span>·</span>
+    <span>
+      <a href="https://icons8.com/icon/MsepWqZ28ZfG/checklist" target="_blank">Checklist</a>,
+      <a href="https://icons8.com/icon/TIUhjwXAGNKn/delivery-truck" target="_blank">Delivery Truck</a>,
+      <a href="https://icons8.com/icon/K5opL9ey0dGT/packages" target="_blank">Packages</a>, and
+      <a href="https://icons8.com/icon/7EwPwbPoLFgi/package" target="_blank">Package</a> icons by
+      <a href="https://icons8.com" target="_blank">Icons8</a>
+    </span>
+    <span>·</span>
+    <span>
+      View source on
+      <a href="https://github.com/TymekDev/przesylki" target="_blank">GitHub</a>
+    </span>
+  </footer>
+</body>
+
 </html>

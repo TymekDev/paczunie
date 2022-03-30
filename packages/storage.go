@@ -69,7 +69,7 @@ func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 			return nil, errors.WithStack(err)
 		}
 		p := NewPkg(name, withUUID(id), WithInpost(inpost), WithStatus(status))
-		pkgs = append(pkgs, p)
+		pkgs = append([]Pkg{p}, pkgs...)
 	}
 
 	return pkgs, nil
