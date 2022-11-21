@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 )
 
 // Storage is used by Client for storing and providing Pkg objects.
@@ -25,11 +26,19 @@ var _ Storage = (*DBStorage)(nil)
 // NewDBStorage creates a DBStorage that fulfills Storage interface. It is
 // checked whether provided database contains Packages(ID, Name, Inpost, Status)
 // table.
-func NewDBStorage(db *sql.DB) (*DBStorage, error) {
+func NewDBStorage(db *sql.DB, initIfEmpty bool) (*DBStorage, error) {
 	const query = "SELECT ID, Name, Inpost, Status FROM Packages"
 	if _, err := db.Query(query); err != nil {
-		const msg = "table not found: Packages(ID, Name, Inpost, Status)"
-		return nil, errors.New(msg)
+		if initIfEmpty {
+			_, err := db.Exec(`CREATE TABLE Packages(ID TEXT NOT NULL, Name TEXT, Inpost INT, Status INT)`)
+			if err != nil {
+				return nil, err
+			}
+			log.Info().Msg("initialized table: Packages(ID, Name, Inpost, Status)")
+		} else {
+			const msg = "table not found: Packages(ID, Name, Inpost, Status)"
+			return nil, errors.New(msg)
+		}
 	}
 	dbs := &DBStorage{
 		db: db,

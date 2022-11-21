@@ -50,13 +50,13 @@ func NewClient(s Storage) (*Client, error) {
 
 // NewClientWithSQLiteStorage is a wrapper on opening connection to SQLite3
 // database, creating a Storage with it, and creating Client with the Storage.
-func NewClientWithSQLiteStorage(dbName string) (*Client, error) {
+func NewClientWithSQLiteStorage(dbName string, initIfEmpty bool) (*Client, error) {
 	db, err := sql.Open("sqlite", dbName)
 	if err != nil {
 		return nil, err
 	}
 
-	dbs, err := NewDBStorage(db)
+	dbs, err := NewDBStorage(db, initIfEmpty)
 	if err != nil {
 		return nil, err
 	}
