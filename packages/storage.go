@@ -42,7 +42,7 @@ func NewDBStorage(db *sql.DB) (*DBStorage, error) {
 func (dbs *DBStorage) StorePkg(p Pkg) error {
 	const query = "INSERT INTO Packages(ID, Name, Inpost, Status) VALUES (?, ?, ?, ?)"
 	if _, err := dbs.db.Exec(query, p.ID, p.Name, p.Inpost, p.Status); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return nil
 }
@@ -53,7 +53,7 @@ func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 	const query = "SELECT ID, Name, Inpost, Status FROM Packages"
 	rows, err := dbs.db.Query(query)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -66,7 +66,7 @@ func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 	)
 	for rows.Next() {
 		if err := rows.Scan(&id, &name, &inpost, &status); err != nil {
-			return nil, errors.WithStack(err)
+			return nil, err
 		}
 		p := NewPkg(name, withUUID(id), WithInpost(inpost), WithStatus(status))
 		pkgs = append([]Pkg{p}, pkgs...)
@@ -79,7 +79,7 @@ func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 func (dbs *DBStorage) UpdatePkgStatus(id uuid.UUID, status Status) error {
 	const query = "UPDATE Packages SET Status = ? WHERE ID = ?"
 	if _, err := dbs.db.Exec(query, status, id); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return nil
 }
@@ -88,7 +88,7 @@ func (dbs *DBStorage) UpdatePkgStatus(id uuid.UUID, status Status) error {
 func (dbs *DBStorage) DeletePkg(id uuid.UUID) error {
 	const query = "DELETE FROM Packages WHERE ID = ?"
 	if _, err := dbs.db.Exec(query, id); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return nil
 }

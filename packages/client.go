@@ -31,7 +31,7 @@ var _ http.Handler = (*Client)(nil)
 func NewClient(s Storage) (*Client, error) {
 	t, err := template.ParseFS(_fs, "index.html")
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, err
 	}
 	c := &Client{r: mux.NewRouter(), s: s, t: t}
 	// TODO: prevent directory listing
@@ -53,12 +53,12 @@ func NewClient(s Storage) (*Client, error) {
 func NewClientWithSQLiteStorage(dbName string) (*Client, error) {
 	db, err := sql.Open("sqlite", dbName)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, err
 	}
 
 	dbs, err := NewDBStorage(db)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, err
 	}
 
 	return NewClient(dbs)
@@ -72,7 +72,7 @@ func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (c *Client) handleError(f func(http.ResponseWriter, *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := f(w, r); err != nil {
-			log.Error().Stack().Err(err).Send()
+			log.Error().Err(err).Send()
 			http.Error(w, "", http.StatusInternalServerError)
 			return
 		}
@@ -85,14 +85,14 @@ func (c *Client) handleGET(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	if err := c.t.Execute(w, pkgs); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return nil
 }
 
 func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	if err := parseForm(r, "POST"); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	name := r.Form.Get("name")
@@ -110,7 +110,7 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 		WithStatus(status),
 	)
 	if err := c.s.StorePkg(p); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	log.Debug().Interface("pkg", p).Msg("Stored package")
 
@@ -122,21 +122,21 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 
 func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
 	if err := parseForm(r, "PATCH"); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	id, err := uuid.Parse(r.Form.Get("id"))
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	status, err := StatusFromString(r.Form.Get("status"))
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	if err := c.s.UpdatePkgStatus(id, status); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	log.Debug().Interface("id", id).Interface("status", status).Msg("Updated status")
 
@@ -150,18 +150,18 @@ func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
 	// using XMLHttpRequest in JS.
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	s := string(b)
 	log.Debug().Str("body", s).Str("method", "DELETE").Msg("Read body")
 
 	id, err := uuid.Parse(s)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	if err := c.s.DeletePkg(id); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	log.Debug().Interface("id", id).Msg("Deleted package")
 
@@ -170,7 +170,7 @@ func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
 
 func parseForm(r *http.Request, m string) error {
 	if err := r.ParseForm(); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	log.Debug().Interface("form", r.Form).Str("method", m).Msg("Parsed form")
 	return nil

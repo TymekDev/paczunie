@@ -31,11 +31,11 @@ func main() {
 
 	c, err := packages.NewClientWithSQLiteStorage(*dbName)
 	if err != nil {
-		log.Fatal().Stack().Err(err).Send()
+		log.Fatal().Err(err).Send()
 	}
 
 	log.Info().Int("port", *port).Msg("Started listening")
 	if err := http.ListenAndServe(fmt.Sprint(":", *port), c); err != nil {
-		log.Fatal().Stack().Err(err).Send()
+		log.Fatal().Err(err).Send()
 	}
 }

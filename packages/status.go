@@ -35,7 +35,7 @@ func StatusFromInt(x int) (Status, error) {
 func StatusFromString(s string) (Status, error) {
 	x, err := strconv.Atoi(s)
 	if err != nil {
-		return 0, errors.WithStack(err)
+		return 0, err
 	}
 	return StatusFromInt(x)
 }
