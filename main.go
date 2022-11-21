@@ -13,9 +13,9 @@ import (
 )
 
 func main() {
-	port := flag.Int("p", 8080, "port to listen on")
+	port := flag.Int("port", 8080, "port to listen on")
 	debug := flag.Bool("debug", false, "sets log level to debug")
-	dbName := flag.String("db", "packages.db", "path to SQLite3 database")
+	dbName := flag.String("database", "packages.db", "path to SQLite3 database")
 	initIfEmpty := flag.Bool("init", false, "initialize Packages table if it does not exist")
 	flag.Parse()
 
