@@ -1,4 +1,4 @@
-module packages
+module git.sr.ht/~tymek/rpi-paczunie
 
 go 1.17
 

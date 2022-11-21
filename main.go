@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"packages/packages"
+	"git.sr.ht/~tymek/rpi-paczunie/packages"
 )
 
 func main() {
