@@ -19,9 +19,10 @@ func main() {
 	dbName := flag.String("db", "packages.db", "path to SQLite3 database")
 	flag.Parse()
 
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	const timeFormat = "2006-01-02 15:04 -0700"
+	zerolog.TimeFieldFormat = timeFormat
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	log.Logger = log.Output(zerolog.ConsoleWriter{TimeFormat: timeFormat, Out: os.Stderr})
 	switch {
 	case *debug:
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
