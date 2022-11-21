@@ -2,10 +2,10 @@ package packages
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"github.com/rs/zerolog/log"
 )
 
 // Storage is used by Client for storing and providing Pkg objects.
@@ -34,7 +34,7 @@ func NewDBStorage(db *sql.DB, initIfEmpty bool) (*DBStorage, error) {
 			if err != nil {
 				return nil, err
 			}
-			log.Info().Msg("initialized table: Packages(ID, Name, Inpost, Status)")
+			log.Println("INFO", "initialized table: Packages(ID, Name, Inpost, Status)")
 		} else {
 			const msg = "table not found: Packages(ID, Name, Inpost, Status)"
 			return nil, errors.New(msg)

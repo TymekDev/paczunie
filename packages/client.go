@@ -5,12 +5,12 @@ import (
 	"embed"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
-	"github.com/rs/zerolog/log"
 	_ "modernc.org/sqlite"
 )
 
@@ -72,7 +72,7 @@ func (c *Client) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (c *Client) handleError(f func(http.ResponseWriter, *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := f(w, r); err != nil {
-			log.Error().Err(err).Send()
+			log.Println("ERROR", err)
 			http.Error(w, "", http.StatusInternalServerError)
 			return
 		}
@@ -112,7 +112,6 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	if err := c.s.StorePkg(p); err != nil {
 		return err
 	}
-	log.Debug().Interface("pkg", p).Msg("Stored package")
 
 	// r.URL.Path is needed in case Client listend on a different handle than "/"
 	http.Redirect(w, r, r.URL.Path, http.StatusMovedPermanently)
@@ -138,7 +137,6 @@ func (c *Client) handlePATCH(w http.ResponseWriter, r *http.Request) error {
 	if err := c.s.UpdatePkgStatus(id, status); err != nil {
 		return err
 	}
-	log.Debug().Interface("id", id).Interface("status", status).Msg("Updated status")
 
 	w.Write([]byte(status.String()))
 
@@ -153,7 +151,6 @@ func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	s := string(b)
-	log.Debug().Str("body", s).Str("method", "DELETE").Msg("Read body")
 
 	id, err := uuid.Parse(s)
 	if err != nil {
@@ -163,7 +160,6 @@ func (c *Client) handleDELETE(w http.ResponseWriter, r *http.Request) error {
 	if err := c.s.DeletePkg(id); err != nil {
 		return err
 	}
-	log.Debug().Interface("id", id).Msg("Deleted package")
 
 	return nil
 }
@@ -172,6 +168,5 @@ func parseForm(r *http.Request, m string) error {
 	if err := r.ParseForm(); err != nil {
 		return err
 	}
-	log.Debug().Interface("form", r.Form).Str("method", m).Msg("Parsed form")
 	return nil
 }
