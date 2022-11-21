@@ -9,9 +9,9 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	_ "github.com/mattn/go-sqlite3" // SQLite3 database driver
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
+	_ "modernc.org/sqlite"
 )
 
 //go:embed index.html static
@@ -51,7 +51,7 @@ func NewClient(s Storage) (*Client, error) {
 // NewClientWithSQLiteStorage is a wrapper on opening connection to SQLite3
 // database, creating a Storage with it, and creating Client with the Storage.
 func NewClientWithSQLiteStorage(dbName string) (*Client, error) {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open("sqlite", dbName)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
