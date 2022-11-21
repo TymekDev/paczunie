@@ -1,9 +1,8 @@
 package packages
 
 import (
+	"fmt"
 	"strconv"
-
-	"github.com/pkg/errors"
 )
 
 // Status denotes current status of a Pkg.
@@ -25,7 +24,7 @@ func StatusFromInt(x int) (Status, error) {
 	status := Status(x)
 	if status < Ordered || status > Delivered {
 		const msg = "Status value (%d) out of range (%d - %d)"
-		return 0, errors.Errorf(msg, status, Ordered, Delivered)
+		return 0, fmt.Errorf(msg, status, Ordered, Delivered)
 	}
 	return status, nil
 }

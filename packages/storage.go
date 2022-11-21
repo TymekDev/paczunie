@@ -2,10 +2,10 @@ package packages
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 
 	"github.com/google/uuid"
-	"github.com/pkg/errors"
 )
 
 // Storage is used by Client for storing and providing Pkg objects.

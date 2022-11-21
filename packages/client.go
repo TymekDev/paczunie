@@ -3,6 +3,7 @@ package packages
 import (
 	"database/sql"
 	"embed"
+	"errors"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 	_ "modernc.org/sqlite"
 )
 
