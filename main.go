@@ -8,7 +8,6 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/rs/zerolog/pkgerrors"
 
 	"packages/packages"
 )
@@ -22,7 +21,6 @@ func main() {
 
 	const timeFormat = "2006-01-02 15:04 -0700"
 	zerolog.TimeFieldFormat = timeFormat
-	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 	log.Logger = log.Output(zerolog.ConsoleWriter{TimeFormat: timeFormat, Out: os.Stderr})
 	switch {
 	case *debug:
