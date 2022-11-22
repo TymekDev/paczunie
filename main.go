@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"git.sr.ht/~tymek/rpi-paczunie/packages"
 )
 
 func main() {
@@ -15,7 +13,7 @@ func main() {
 	initIfEmpty := flag.Bool("init", false, "initialize Packages table if it does not exist")
 	flag.Parse()
 
-	c, err := packages.NewClientWithSQLiteStorage(*dbName, *initIfEmpty)
+	c, err := NewClientWithSQLiteStorage(*dbName, *initIfEmpty)
 	if err != nil {
 		log.Fatalln("FATAL", err)
 	}
