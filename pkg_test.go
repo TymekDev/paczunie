@@ -31,9 +31,9 @@ func TestNewPkg(t *testing.T) {
 			},
 		},
 		{
-			"inpost",
-			[]PkgOption{WithInpost(true)},
-			Pkg{Name: "inpost", Inpost: true, Status: Ordered},
+			"pickup_point",
+			[]PkgOption{WithPickupPoint(true)},
+			Pkg{Name: "pickup_point", PickupPoint: true, Status: Ordered},
 		},
 		{
 			"status_1",
@@ -46,22 +46,22 @@ func TestNewPkg(t *testing.T) {
 			Pkg{Name: "status_2", Status: Shipped},
 		},
 		{
-			"inpost_status",
-			[]PkgOption{WithInpost(true), WithStatus(Ordered)},
-			Pkg{Name: "inpost_status", Inpost: true, Status: Ordered},
+			"pickup_point_status",
+			[]PkgOption{WithPickupPoint(true), WithStatus(Ordered)},
+			Pkg{Name: "pickup_point_status", PickupPoint: true, Status: Ordered},
 		},
 		{
-			"uuid_inpost_status_uuid",
+			"uuid_pickup_point_status_uuid",
 			[]PkgOption{
 				withUUID(uuid.MustParse("00000000-0000-0000-0000-000000000000")),
-				WithInpost(true),
+				WithPickupPoint(true),
 				WithStatus(Ordered),
 			},
 			Pkg{
-				ID:     uuid.MustParse("00000000-0000-0000-0000-000000000000"),
-				Name:   "uuid_inpost_status_uuid",
-				Inpost: true,
-				Status: Ordered,
+				ID:          uuid.MustParse("00000000-0000-0000-0000-000000000000"),
+				Name:        "uuid_pickup_point_status_uuid",
+				PickupPoint: true,
+				Status:      Ordered,
 			},
 		},
 	}
@@ -70,7 +70,7 @@ func TestNewPkg(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			p := NewPkg(tt.name, tt.options...)
 			assert.Equal(t, tt.want.Name, p.Name)
-			assert.Equal(t, tt.want.Inpost, p.Inpost)
+			assert.Equal(t, tt.want.PickupPoint, p.PickupPoint)
 			assert.Equal(t, tt.want.Status, p.Status)
 		})
 	}
@@ -107,7 +107,7 @@ func TestUUIDOpt_withUUID(t *testing.T) {
 	}
 }
 
-func TestInpostOpt_apply(t *testing.T) {
+func TestPickupPointOpt_apply(t *testing.T) {
 	tests := []bool{
 		true,
 		false,
@@ -116,13 +116,13 @@ func TestInpostOpt_apply(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(strconv.FormatBool(tt), func(t *testing.T) {
 			var p Pkg
-			inpostOpt(tt).apply(&p)
-			assert.Equal(t, tt, p.Inpost)
+			pickupPointOpt(tt).apply(&p)
+			assert.Equal(t, tt, p.PickupPoint)
 		})
 	}
 }
 
-func TestInpostOpt_WithInpost(t *testing.T) {
+func TestPickupPointOpt_WithInpost(t *testing.T) {
 	tests := []bool{
 		true,
 		false,
@@ -131,8 +131,8 @@ func TestInpostOpt_WithInpost(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(strconv.FormatBool(tt), func(t *testing.T) {
 			var p Pkg
-			WithInpost(tt).apply(&p)
-			assert.Equal(t, tt, p.Inpost)
+			WithPickupPoint(tt).apply(&p)
+			assert.Equal(t, tt, p.PickupPoint)
 		})
 	}
 }

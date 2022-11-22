@@ -18,7 +18,7 @@
         <input type="text" name="name" placeholder="Nazwa" required>
         <fieldset>
           <legend>Ustawienia</legend>
-          <label><input type="checkbox" name="inpost"> Inpost</label>
+          <label><input type="checkbox" name="pickup-point"> Do punktu odbioru</label>
           <label><input type="checkbox" name="shipped"> W drodze</label>
         </fieldset>
       </div>
@@ -35,7 +35,7 @@
         <span class="status-icons">
           <i class="si si-1"></i>
           <i class="si si-2"></i>
-          {{ if $pkg.Inpost }}<i class="si si-3"></i>{{ end }}
+          {{ if $pkg.PickupPoint }}<i class="si si-3"></i>{{ end }}
           <i class="si si-4"></i>
         </span>
         <span>

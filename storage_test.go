@@ -14,9 +14,9 @@ func TestDBStorage_NewDBStorage(t *testing.T) {
 	require.NoError(t, err)
 
 	_, err = NewDBStorage(db, false)
-	assert.EqualError(t, err, "table not found: Packages(ID, Name, Inpost, Status)")
+	assert.EqualError(t, err, "table not found: Packages(ID, Name, PickupPoint, Status)")
 
-	const query = "CREATE TABLE Packages(ID, Name, Inpost, Status)"
+	const query = "CREATE TABLE Packages(ID, Name, PickupPoint, Status)"
 	_, err = db.Exec(query)
 	require.NoError(t, err)
 

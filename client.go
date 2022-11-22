@@ -106,7 +106,7 @@ func (c *Client) handlePOST(w http.ResponseWriter, r *http.Request) error {
 	}
 	p := NewPkg(
 		name,
-		WithInpost(r.Form.Has("inpost")),
+		WithPickupPoint(r.Form.Has("pickup-point")),
 		WithStatus(status),
 	)
 	if err := c.s.StorePkg(p); err != nil {

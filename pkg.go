@@ -8,8 +8,8 @@ type Pkg struct {
 	ID uuid.UUID
 	// Name is a package name given by the user.
 	Name string
-	// Inpost a flag whether package will arrive at Inpost parcel locker.
-	Inpost bool
+	// PickupPoint a flag whether package will arrive at PickupPoint parcel locker.
+	PickupPoint bool
 	// Status denotes current status of a Pkg.
 	Status Status
 }
@@ -41,17 +41,17 @@ func withUUID(x uuid.UUID) PkgOption {
 	return uuidOpt(x)
 }
 
-type inpostOpt bool
+type pickupPointOpt bool
 
-var _ PkgOption = inpostOpt(false)
+var _ PkgOption = pickupPointOpt(false)
 
-func (o inpostOpt) apply(p *Pkg) {
-	p.Inpost = bool(o)
+func (o pickupPointOpt) apply(p *Pkg) {
+	p.PickupPoint = bool(o)
 }
 
-// WithInpost returns a PkgOption setting Inpost field in Pkg struct.
-func WithInpost(x bool) PkgOption {
-	return inpostOpt(x)
+// WithPickupPoint returns a PkgOption setting PickupPoint field in Pkg struct.
+func WithPickupPoint(x bool) PkgOption {
+	return pickupPointOpt(x)
 }
 
 type statusOpt Status

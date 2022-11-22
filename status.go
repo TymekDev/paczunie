@@ -13,8 +13,8 @@ const (
 	Ordered Status = iota + 1
 	// Shipped Status means that a package has been posted.
 	Shipped
-	// Inpost Status means that a packages has arrived at a parcel locker.
-	Inpost
+	// PickupPoint Status means that a packages has arrived at a parcel locker.
+	PickupPoint
 	// Delivered Status means that a package has been delivered.
 	Delivered
 )
