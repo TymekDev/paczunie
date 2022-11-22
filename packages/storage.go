@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"sync"
 
 	"github.com/google/uuid"
 )
@@ -18,6 +19,8 @@ type Storage interface {
 
 // DBStorage is a wrapper on provided *sql.DB fulfilling Storage interface.
 type DBStorage struct {
+	sync.Mutex
+
 	db *sql.DB
 }
 
@@ -49,6 +52,9 @@ func NewDBStorage(db *sql.DB, initIfEmpty bool) (*DBStorage, error) {
 // StorePkg saves p into a Packages table via DBStorage's underlying database
 // connection.
 func (dbs *DBStorage) StorePkg(p Pkg) error {
+	dbs.Lock()
+	defer dbs.Unlock()
+
 	const query = "INSERT INTO Packages(ID, Name, Inpost, Status) VALUES (?, ?, ?, ?)"
 	if _, err := dbs.db.Exec(query, p.ID, p.Name, p.Inpost, p.Status); err != nil {
 		return err
@@ -86,6 +92,9 @@ func (dbs *DBStorage) LoadPkgs() ([]Pkg, error) {
 
 // UpdatePkgStatus changes status of a package with provided ID to status.
 func (dbs *DBStorage) UpdatePkgStatus(id uuid.UUID, status Status) error {
+	dbs.Lock()
+	defer dbs.Unlock()
+
 	const query = "UPDATE Packages SET Status = ? WHERE ID = ?"
 	if _, err := dbs.db.Exec(query, status, id); err != nil {
 		return err
@@ -95,6 +104,9 @@ func (dbs *DBStorage) UpdatePkgStatus(id uuid.UUID, status Status) error {
 
 // DeletePkg deletes a package entry with provided ID.
 func (dbs *DBStorage) DeletePkg(id uuid.UUID) error {
+	dbs.Lock()
+	defer dbs.Unlock()
+
 	const query = "DELETE FROM Packages WHERE ID = ?"
 	if _, err := dbs.db.Exec(query, id); err != nil {
 		return err
