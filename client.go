@@ -51,7 +51,13 @@ func NewClient(s Storage) (*Client, error) {
 // NewClientWithSQLiteStorage is a wrapper on opening connection to SQLite3
 // database, creating a Storage with it, and creating Client with the Storage.
 func NewClientWithSQLiteStorage(dbName string, initIfEmpty bool) (*Client, error) {
-	db, err := sql.Open("sqlite", dbName)
+	const pragmas = "_pragma=busy_timeout(100000)" +
+		"&_pragma=journal_mode(WAL)" +
+		"&_pragma=foreign_keys(1)" +
+		"&_pragma=synchronous(NORMAL)" +
+		"&_pragma=journal_size_limit(100000000)"
+
+	db, err := sql.Open("sqlite", dbName+"?"+pragmas)
 	if err != nil {
 		return nil, err
 	}
