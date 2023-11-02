@@ -1,4 +1,4 @@
-module git.sr.ht/~tymek/paczunie
+module github.com/TymekDev/paczunie
 
 go 1.17
 
